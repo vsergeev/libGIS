@@ -4,8 +4,8 @@
  * \file ihex.h
  * \brief Low-level utility functions to create, read, write, and print Intel HEX8 binary records.
  * \author Vanya A. Sergeev <vsergeev@gmail.com>
- * \date October 10 2009
- * \version 1.0.3
+ * \date January 26 2011
+ * \version 1.0.5
  */
  
 #include <stdio.h>
@@ -38,12 +38,12 @@ enum _IHexDefinitions {
  * All possible error codes the Intel HEX8 record utility functions may return.
  */
 enum IHexErrors {
-	IHEX_OK = 0, /**< Error code for success or no error. */
-	IHEX_ERROR_FILE = -1, /**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
-	IHEX_ERROR_EOF = -2, /**< Error code for encountering end-of-file when reading from a file. */
-	IHEX_ERROR_INVALID_RECORD = -3, /**< Error code for error if an invalid record was read. */
-	IHEX_ERROR_INVALID_ARGUMENTS = -4, /**< Error code for error from invalid arguments passed to function. */
-	IHEX_ERROR_NEWLINE = -5, /**< Error code for encountering a newline with no record when reading from a file. */
+	IHEX_OK = 0, 				/**< Error code for success or no error. */
+	IHEX_ERROR_FILE = -1, 			/**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
+	IHEX_ERROR_EOF = -2, 			/**< Error code for encountering end-of-file when reading from a file. */
+	IHEX_ERROR_INVALID_RECORD = -3, 	/**< Error code for error if an invalid record was read. */
+	IHEX_ERROR_INVALID_ARGUMENTS = -4, 	/**< Error code for error from invalid arguments passed to function. */
+	IHEX_ERROR_NEWLINE = -5, 		/**< Error code for encountering a newline with no record when reading from a file. */
 };
 
 /**
@@ -62,11 +62,11 @@ enum IHexRecordTypes {
  * Structure to hold the fields of an Intel HEX8 record.
  */
 struct _IHexRecord {
-	uint16_t address; /**< The 16-bit address field. */
-	uint8_t data[IHEX_MAX_DATA_LEN/2]; /**< The 8-bit array data field, which has a maximum size of 256 bytes. */
-	int dataLen; /**< The number of bytes of data stored in this record. */
-	int type; /**< The Intel Hex record type of this record. */
-	uint8_t checksum; /**< The checksum of this record. */
+	uint16_t address; 			/**< The 16-bit address field. */
+	uint8_t data[IHEX_MAX_DATA_LEN/2]; 	/**< The 8-bit array data field, which has a maximum size of 256 bytes. */
+	int dataLen; 				/**< The number of bytes of data stored in this record. */
+	int type; 				/**< The Intel Hex record type of this record. */
+	uint8_t checksum; 			/**< The checksum of this record. */
 };
 
 /** Alias "IHexRecord" for struct _IHexRecord, done for convenience and clarity. */
@@ -76,14 +76,14 @@ typedef struct _IHexRecord IHexRecord;
  * Sets all of the record fields of an Intel HEX8 record structure.
  * \param type The Intel HEX8 record type (integer value of 0 through 5).
  * \param address The 16-bit address of the data.
- * \param data The 8-bit array of data.
+ * \param data A point to the 8-bit array of data.
  * \param dataLen The size of the 8-bit data array.
  * \param ihexRecord A pointer to the target Intel HEX8 record structure where these fields will be set.
  * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
  * \retval IHEX_OK on success.
  * \retval IHEX_ERROR_INVALID_ARGUMENTS if ihexRecord does not point to a valid IHexRecord structure, or if the length of the 8-bit data array is out of range (less than zero or greater than the maximum data length allowed by record specifications, see IHexRecord.data).
 */
-int New_IHexRecord(int type, uint16_t address, uint8_t data[], int dataLen, IHexRecord *ihexRecord);
+int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen, IHexRecord *ihexRecord);
 
 /**
  * Reads an Intel HEX8 record from an opened file.

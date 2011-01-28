@@ -3,7 +3,7 @@
  *  Utility functions to create, read, write, and print Intel HEX8 binary records.
  *
  *  Written by Vanya A. Sergeev <vsergeev@gmail.com>
- *  Version 1.0.4 - July 2010
+ *  Version 1.0.5 - January 2011
  *
  */
 
@@ -11,7 +11,7 @@
 
 /* Initializes a new IHexRecord structure that the paramater ihexRecord points to with the passed
  * record type, 16-bit integer address, 8-bit data array, and size of 8-bit data array. */
-int New_IHexRecord(int type, uint16_t address, uint8_t data[], int dataLen, IHexRecord *ihexRecord) {
+int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen, IHexRecord *ihexRecord) {
 	/* Data length size check, assertion of ihexRecord */
 	if (dataLen < 0 || dataLen > IHEX_MAX_DATA_LEN/2 || ihexRecord == NULL)
 		return IHEX_ERROR_INVALID_ARGUMENTS;

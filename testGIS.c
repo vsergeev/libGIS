@@ -4,6 +4,7 @@
  * Author: Vanya A. Sergeev <vsergeev@gmail.com>
  *
  */
+
 #include <stdio.h>
 #include <string.h>
 #include "srecord.h"

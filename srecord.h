@@ -4,8 +4,8 @@
  * \file srecord.h
  * \brief Low-level utility functions to create, read, write, and print Motorola S-Record binary records.
  * \author Vanya A. Sergeev <vsergeev@gmail.com>
- * \date October 10 2009
- * \version 1.0.3
+ * \date January 26 2011
+ * \version 1.0.5
  */
  
 #include <stdio.h>
@@ -39,12 +39,12 @@ enum _SRecordDefinitions {
  * All possible error codes the Motorola S-Record utility functions may return.
  */
 enum SRecordErrors {
-	SRECORD_OK = 0, /**< Error code for success or no error. */
-	SRECORD_ERROR_FILE = -1, /**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
-	SRECORD_ERROR_EOF = -2, /**< Error code for encountering end-of-file when reading from a file. */
-	SRECORD_ERROR_INVALID_RECORD = -3, /**< Error code for error if an invalid record was read. */
-	SRECORD_ERROR_INVALID_ARGUMENTS = -4, /**< Error code for error from invalid arguments passed to function. */
-	SRECORD_ERROR_NEWLINE = -5, /**< Error code for encountering a newline with no record when reading from a file. */
+	SRECORD_OK = 0, 			/**< Error code for success or no error. */
+	SRECORD_ERROR_FILE = -1, 		/**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
+	SRECORD_ERROR_EOF = -2, 		/**< Error code for encountering end-of-file when reading from a file. */
+	SRECORD_ERROR_INVALID_RECORD = -3, 	/**< Error code for error if an invalid record was read. */
+	SRECORD_ERROR_INVALID_ARGUMENTS = -4, 	/**< Error code for error from invalid arguments passed to function. */
+	SRECORD_ERROR_NEWLINE = -5, 		/**< Error code for encountering a newline with no record when reading from a file. */
 };
 
 /**
@@ -67,11 +67,11 @@ enum SRecordTypes {
  * Structure to hold the fields of a Motorola S-Record record.
  */
 struct _SRecord {
-	uint32_t address; /**< The address field. This can be 16-,24-, or 32-bits depending on the record type. */
-	uint8_t data[SRECORD_MAX_DATA_LEN/2]; /**< The 8-bit array data field, which has a maximum size of 32 bytes. */
-	int dataLen; /**< The number of bytes of data stored in this record. */
-	int type; /**< The Motorola S-Record type of this record (S0-S9). */
-	uint8_t checksum; /**< The checksum of this record. */
+	uint32_t address; 			/**< The address field. This can be 16, 24, or 32 bits depending on the record type. */
+	uint8_t data[SRECORD_MAX_DATA_LEN/2]; 	/**< The 8-bit array data field, which has a maximum size of 32 bytes. */
+	int dataLen; 				/**< The number of bytes of data stored in this record. */
+	int type; 				/**< The Motorola S-Record type of this record (S0-S9). */
+	uint8_t checksum; 			/**< The checksum of this record. */
 };
 
 /** Alias "SRecord" for struct _SRecord, done for convenience and clarity. */
@@ -81,14 +81,14 @@ typedef struct _SRecord SRecord;
  * Sets all of the record fields of a Motorola S-Record structure.
  * \param type The Motorola S-Record type (integer value of 0 through 9).
  * \param address The 32-bit address of the data. The actual size of the address (16-,24-, or 32-bits) when written to a file depends on the S-Record type.
- * \param data The 8-bit array of data.
+ * \param data A pointer to the 8-bit array of data.
  * \param dataLen The size of the 8-bit data array.
  * \param srec A pointer to the target Motorola S-Record structure where these fields will be set.
  * \return SRECORD_OK on success, otherwise one of the SRECORD_ERROR_ error codes.
  * \retval SRECORD_OK on success.
  * \retval SRECORD_ERROR_INVALID_ARGUMENTS if srec does not point to a valid SRecord structure, or if the length of the 8-bit data array is out of range (less than zero or greater than the maximum data length allowed by record specifications, see SRecord.data).
 */
-int New_SRecord(int type, uint32_t address, uint8_t data[], int dataLen, SRecord *srec);
+int New_SRecord(int type, uint32_t address, const uint8_t *data, int dataLen, SRecord *srec);
 
 /**
  * Reads a Motorola S-Record record from an opened file.

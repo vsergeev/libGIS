@@ -29,20 +29,20 @@ enum _AtmelGenericDefinitions {
  * All possible error codes the Atmel Generic record utility functions may return.
  */
 enum AtmelGenericErrors {
-	ATMEL_GENERIC_OK = 0, /**< Error code for success or no error. */
-	ATMEL_GENERIC_ERROR_FILE = -1, /**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
-	ATMEL_GENERIC_ERROR_EOF = -2, /**< Error code for encountering end-of-file when reading from a file. */
-	ATMEL_GENERIC_ERROR_INVALID_RECORD = -3, /**< Error code for error if an invalid record was read. */
-	ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS = -4, /**< Error code for error from invalid arguments passed to function. */
-	ATMEL_GENERIC_ERROR_NEWLINE = -5, /**< Error code for encountering a newline with no record when reading from a file. */
+	ATMEL_GENERIC_OK = 0, 			/**< Error code for success or no error. */
+	ATMEL_GENERIC_ERROR_FILE = -1, 		/**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
+	ATMEL_GENERIC_ERROR_EOF = -2, 		/**< Error code for encountering end-of-file when reading from a file. */
+	ATMEL_GENERIC_ERROR_INVALID_RECORD = -3, 	/**< Error code for error if an invalid record was read. */
+	ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS = -4, 	/**< Error code for error from invalid arguments passed to function. */
+	ATMEL_GENERIC_ERROR_NEWLINE = -5, 		/**< Error code for encountering a newline with no record when reading from a file. */
 };
 
 /**
  * Structure to hold the fields of an Atmel Generic record.
  */
 struct _AtmelGenericRecord {
-	uint32_t address; /**< The 24-bit address field of the record. Note that the Atmel Generic record only supports 24-bit addresses, despite the additional storage capacity (32 bits) of this variable. */
-	uint16_t data; /**< The 16-bit data field of the record. */
+	uint32_t address; 	/**< The 24-bit address field of the record. */
+	uint16_t data; 		/**< The 16-bit data field of the record. */
 };
 
 /** Alias "AtmelGenericRecord" for struct _AtmelGenericRecord, done for convenience and clarity. */

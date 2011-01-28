@@ -3,7 +3,7 @@
  *  Utility functions to create, read, write, and print Motorola S-Record binary records.
  *
  *  Written by Vanya A. Sergeev <vsergeev@gmail.com>
- *  Version 1.0.3 - October 2009
+ *  Version 1.0.5 - January 2011 
  *
  */
 
@@ -25,7 +25,7 @@ static int SRecord_Address_Lengths[] = {
 
 /* Initializes a new IHexRecord structure that the paramater ihexRecord points to with the passed
  * S-Record type, up to 32-bit integer address, 8-bit data array, and size of 8-bit data array. */
-int New_SRecord(int type, uint32_t address, uint8_t data[], int dataLen, SRecord *srec) {
+int New_SRecord(int type, uint32_t address, const uint8_t *data, int dataLen, SRecord *srec) {
 	/* Data length size check, assertion of srec */
 	if (dataLen < 0 || dataLen > SRECORD_MAX_DATA_LEN/2 || srec == NULL)
 		return SRECORD_ERROR_INVALID_ARGUMENTS;

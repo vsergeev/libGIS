@@ -10,4 +10,5 @@ $(PROGNAME): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) 
 
 clean:
-	rm -rf $(PROGNAME) *.o
+	rm -rf $(PROGNAME) $(OBJECTS)
+

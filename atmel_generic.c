@@ -3,7 +3,7 @@
  *  Utility functions to create, read, write, and print Atmel Generic binary records.
  *
  *  Written by Vanya A. Sergeev <vsergeev@gmail.com>
- *  Version 1.0.3 - October 2009
+ *  Version 1.0.5 - January 2011
  *
  */
 
