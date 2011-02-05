@@ -29,9 +29,9 @@ enum _AtmelGenericDefinitions {
  * All possible error codes the Atmel Generic record utility functions may return.
  */
 enum AtmelGenericErrors {
-	ATMEL_GENERIC_OK = 0, 			/**< Error code for success or no error. */
-	ATMEL_GENERIC_ERROR_FILE = -1, 		/**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
-	ATMEL_GENERIC_ERROR_EOF = -2, 		/**< Error code for encountering end-of-file when reading from a file. */
+	ATMEL_GENERIC_OK = 0, 				/**< Error code for success or no error. */
+	ATMEL_GENERIC_ERROR_FILE = -1, 			/**< Error code for error while reading from or writing to a file. You may check errno for the exact error if this error code is encountered. */
+	ATMEL_GENERIC_ERROR_EOF = -2, 			/**< Error code for encountering end-of-file when reading from a file. */
 	ATMEL_GENERIC_ERROR_INVALID_RECORD = -3, 	/**< Error code for error if an invalid record was read. */
 	ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS = -4, 	/**< Error code for error from invalid arguments passed to function. */
 	ATMEL_GENERIC_ERROR_NEWLINE = -5, 		/**< Error code for encountering a newline with no record when reading from a file. */
@@ -76,22 +76,22 @@ int Read_AtmelGenericRecord(AtmelGenericRecord *genericRecord, FILE *in);
 /**
  * Writes an Atmel Generic record to an opened file.
  * Note that the Atmel Generic record only supports 24-bit addresses, so only 24-bits of the address stored in the Atmel Generic record structure that genericRecord points to will be written.
- * \param genericRecord The Atmel Generic record structure that will be written.
+ * \param genericRecord A pointer to the Atmel Generic record structure.
  * \param out A file pointer to an opened file that can be written to.
  * \return ATMEL_GENERIC_OK on success, otherwise one of the ATMEL_GENERIC_ERROR_ error codes.
  * \retval ATMEL_GENERIC_OK on success. 
  * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the file pointer is invalid.
  * \retval ATMEL_GENERIC_ERROR_FILE if a file writing error has occured.
 */
-int Write_AtmelGenericRecord(const AtmelGenericRecord genericRecord, FILE *out);
+int Write_AtmelGenericRecord(const AtmelGenericRecord *genericRecord, FILE *out);
 
 /**
  * Prints the contents of an Atmel Generic record structure to stdout.
  * The record dump consists of the address and data fields of the record.
- * \param genericRecord The Atmel Generic record structure that will be printed to stdout.
+ * \param genericRecord A pointer to the Atmel Generic record structure.
  * \return Always returns ATMEL_GENERIC_OK (success).
  * \retval ATMEL_GENERIC_OK on success.
 */
-void Print_AtmelGenericRecord(const AtmelGenericRecord genericRecord);
+void Print_AtmelGenericRecord(const AtmelGenericRecord *genericRecord);
 
 #endif

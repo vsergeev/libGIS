@@ -3,7 +3,7 @@
  *  Utility functions to create, read, write, and print Intel HEX8 binary records.
  *
  *  Written by Vanya A. Sergeev <vsergeev@gmail.com>
- *  Version 1.0.5 - January 2011
+ *  Version 1.0.5 - February 2011
  *
  */
 
@@ -20,7 +20,7 @@ int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen,
 	ihexRecord->address = address;
 	memcpy(ihexRecord->data, data, dataLen);
 	ihexRecord->dataLen = dataLen;
-	ihexRecord->checksum = Checksum_IHexRecord(*ihexRecord);
+	ihexRecord->checksum = Checksum_IHexRecord(ihexRecord);
 	
 	return IHEX_OK;		
 }
@@ -98,14 +98,14 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 	hexBuff[IHEX_CHECKSUM_LEN] = 0;
 	ihexRecord->checksum = strtol(hexBuff, (char **)NULL, 16);
 
-	if (ihexRecord->checksum != Checksum_IHexRecord(*ihexRecord))
+	if (ihexRecord->checksum != Checksum_IHexRecord(ihexRecord))
 		return IHEX_ERROR_INVALID_RECORD;
 	
 	return IHEX_OK;
 }
 
 /* Utility function to write an Intel HEX8 record to a file */
-int Write_IHexRecord(const IHexRecord ihexRecord, FILE *out) {
+int Write_IHexRecord(const IHexRecord *ihexRecord, FILE *out) {
 	int i;
 	
 	/* Check our file pointer */
@@ -113,16 +113,16 @@ int Write_IHexRecord(const IHexRecord ihexRecord, FILE *out) {
 		return IHEX_ERROR_INVALID_ARGUMENTS;
 		
 	/* Check that the data length is in range */
-	if (ihexRecord.dataLen > IHEX_MAX_DATA_LEN/2)
+	if (ihexRecord->dataLen > IHEX_MAX_DATA_LEN/2)
 		return IHEX_ERROR_INVALID_RECORD;
 	
 	/* Write the start code, data count, address, and type fields */
-	if (fprintf(out, "%c%2.2X%2.4X%2.2X", IHEX_START_CODE, ihexRecord.dataLen, ihexRecord.address, ihexRecord.type) < 0)
+	if (fprintf(out, "%c%2.2X%2.4X%2.2X", IHEX_START_CODE, ihexRecord->dataLen, ihexRecord->address, ihexRecord->type) < 0)
 		return IHEX_ERROR_FILE;
 		
 	/* Write the data bytes */
-	for (i = 0; i < ihexRecord.dataLen; i++) {
-		if (fprintf(out, "%2.2X", ihexRecord.data[i]) < 0)
+	for (i = 0; i < ihexRecord->dataLen; i++) {
+		if (fprintf(out, "%2.2X", ihexRecord->data[i]) < 0)
 			return IHEX_ERROR_FILE;
 	}
 	
@@ -134,33 +134,37 @@ int Write_IHexRecord(const IHexRecord ihexRecord, FILE *out) {
 }
 
 /* Utility function to print the information stored in an Intel HEX8 record */
-void Print_IHexRecord(const IHexRecord ihexRecord) {
+void Print_IHexRecord(const IHexRecord *ihexRecord) {
 	int i;
-	printf("Intel HEX8 Record Type: %d\n", ihexRecord.type);
-	printf("Intel HEX8 Record Address: 0x%2.4X\n", ihexRecord.address);
+	printf("Intel HEX8 Record Type: %d\n", ihexRecord->type);
+	printf("Intel HEX8 Record Address: 0x%2.4X\n", ihexRecord->address);
 	printf("Intel HEX8 Record Data: {");
-	for (i = 0; i < ihexRecord.dataLen; i++) {
-		printf("0x%02X, ", ihexRecord.data[i]);
+	for (i = 0; i < ihexRecord->dataLen; i++) {
+		if (i+1 < ihexRecord->dataLen)
+			printf("0x%02X, ", ihexRecord->data[i]);
+		else
+			printf("0x%02X", ihexRecord->data[i]);
 	}
 	printf("}\n");
-	printf("Intel HEX8 Record Checksum: 0x%2.2X\n", ihexRecord.checksum);
+	printf("Intel HEX8 Record Checksum: 0x%2.2X\n", ihexRecord->checksum);
 }
 
 /* Utility function to calculate the checksum of an Intel HEX8 record */
-uint8_t Checksum_IHexRecord(const IHexRecord ihexRecord) {
+uint8_t Checksum_IHexRecord(const IHexRecord *ihexRecord) {
 	uint8_t checksum;
 	int i;
 
 	/* Add the data count, type, address, and data bytes together */
-	checksum = ihexRecord.dataLen;
-	checksum += ihexRecord.type;
-	checksum += (uint8_t)ihexRecord.address;
-	checksum += (uint8_t)((ihexRecord.address & 0xFF00)>>8);
-	for (i = 0; i < ihexRecord.dataLen; i++)
-		checksum += ihexRecord.data[i];
+	checksum = ihexRecord->dataLen;
+	checksum += ihexRecord->type;
+	checksum += (uint8_t)ihexRecord->address;
+	checksum += (uint8_t)((ihexRecord->address & 0xFF00)>>8);
+	for (i = 0; i < ihexRecord->dataLen; i++)
+		checksum += ihexRecord->data[i];
 	
 	/* Two's complement on checksum */
 	checksum = ~checksum + 1;
 
 	return checksum;
 }
+

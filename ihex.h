@@ -4,7 +4,7 @@
  * \file ihex.h
  * \brief Low-level utility functions to create, read, write, and print Intel HEX8 binary records.
  * \author Vanya A. Sergeev <vsergeev@gmail.com>
- * \date January 26 2011
+ * \date February 2011
  * \version 1.0.5
  */
  
@@ -15,7 +15,7 @@
 
 /* General definition of the Intel HEX8 specification */
 enum _IHexDefinitions {
-	/* 768 should be plenty of space to read in an IHex */
+	/* 768 should be plenty of space to read in a Intel HEX8 record */
 	IHEX_RECORD_BUFF_SIZE = 768,
 	/* Offsets and lengths of various fields in an Intel HEX8 record */
 	IHEX_COUNT_OFFSET = 1,
@@ -100,7 +100,7 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in);
 
 /**
  * Writes an Intel HEX8 record to an opened file.
- * \param ihexRecord The Intel HEX8 record structure that will be written.
+ * \param ihexRecord A pointer to the Intel HEX8 record structure.
  * \param out A file pointer to an opened file that can be written to.
  * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
  * \retval IHEX_OK on success. 
@@ -108,23 +108,23 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in);
  * \retval IHEX_ERROR_INVALID_RECORD if the record's data length is out of range (greater than the maximum data length allowed by record specifications, see IHexRecord.data).
  * \retval IHEX_ERROR_FILE if a file writing error has occured.
 */
-int Write_IHexRecord(const IHexRecord ihexRecord, FILE *out);
+int Write_IHexRecord(const IHexRecord *ihexRecord, FILE *out);
 
 /**
  * Prints the contents of an Intel HEX8 record structure to stdout.
  * The record dump consists of the type, address, entire data array, and checksum fields of the record.
- * \param ihexRecord The Intel HEX8 record structure that will be printed to stdout.
+ * \param ihexRecord A pointer to the Intel HEX8 record structure.
  * \return Always returns IHEX_OK (success).
  * \retval IHEX_OK on success.
 */
-void Print_IHexRecord(const IHexRecord ihexRecord);
+void Print_IHexRecord(const IHexRecord *ihexRecord);
 
 /**
  * Calculates the checksum of an Intel HEX8 IHexRecord structure.
  * See the Intel HEX8 specifications for more details on the checksum calculation.
- * \param ihexRecord The Intel HEX8 record structure that the checksum will be calculated of.
+ * \param ihexRecord A pointer to the Intel HEX8 record structure.
  * \return The 8-bit checksum.
 */
-uint8_t Checksum_IHexRecord(const IHexRecord ihexRecord);
+uint8_t Checksum_IHexRecord(const IHexRecord *ihexRecord);
 
 #endif

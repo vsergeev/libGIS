@@ -4,7 +4,7 @@
  * \file srecord.h
  * \brief Low-level utility functions to create, read, write, and print Motorola S-Record binary records.
  * \author Vanya A. Sergeev <vsergeev@gmail.com>
- * \date January 26 2011
+ * \date February 2011
  * \version 1.0.5
  */
  
@@ -105,7 +105,7 @@ int Read_SRecord(SRecord *srec, FILE *in);
 
 /**
  * Writes a Motorola S-Record to an opened file.
- * \param srec The Motorola S-Record structure that will be written.
+ * \param srec A pointer to the Motorola S-Record structure.
  * \param out A file pointer to an opened file that can be written to.
  * \return SRECORD_OK on success, otherwise one of the SRECORD_ERROR_ error codes.
  * \retval SRECORD_OK on success. 
@@ -113,23 +113,23 @@ int Read_SRecord(SRecord *srec, FILE *in);
  * \retval SRECORD_ERROR_INVALID_RECORD if the record's data length (the SRecord.dataLen variable of the record) is out of range (greater than the maximum data length allowed by record specifications, see SRecord.data).
  * \retval SRECORD_ERROR_FILE if a file writing error has occured.
 */
-int Write_SRecord(const SRecord srec, FILE *out);
+int Write_SRecord(const SRecord *srec, FILE *out);
 
 /**
  * Prints the contents of a Motorola S-Record structure to stdout.
  * The record dump consists of the type, address, entire data array, and checksum fields of the record.
- * \param srec The Motorola S-Record structure that will be printed to stdout.
+ * \param srec A pointer to the Motorola S-Record structure.
  * \return Always returns SRECORD_OK (success).
  * \retval SRECORD_OK on success.
 */
-void Print_SRecord(const SRecord srec);
+void Print_SRecord(const SRecord *srec);
 
 /**
  * Calculates the checksum of a Motorola S-Record SRecord structure.
  * See the Motorola S-Record specifications for more details on the checksum calculation.
- * \param srec The Motorola S-Record structure that the checksum will be calculated of.
+ * \param srec A pointer to the Motorola S-Record structure.
  * \return The 8-bit checksum.
 */
-uint8_t Checksum_SRecord(const SRecord srec);
+uint8_t Checksum_SRecord(const SRecord *srec);
 
-#endif	
+#endif

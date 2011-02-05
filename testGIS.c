@@ -38,17 +38,17 @@ int main (int argc, const char * argv[]) {
 
 	if (strcasecmp(argv[1], "generic") == 0) {
 		while (Read_AtmelGenericRecord(&arec, fp) == ATMEL_GENERIC_OK) {
-			Print_AtmelGenericRecord(arec);
+			Print_AtmelGenericRecord(&arec);
 			printf("\n");
 		}
 	} else if (strcasecmp(argv[1], "ihex") == 0) {
 		while (Read_IHexRecord(&irec, fp) == IHEX_OK) {
-			Print_IHexRecord(irec);
+			Print_IHexRecord(&irec);
 			printf("\n");
 		}
 	} else if (strcasecmp(argv[1], "srecord") == 0) {
 		while (Read_SRecord(&srec, fp) == SRECORD_OK) {
-			Print_SRecord(srec);
+			Print_SRecord(&srec);
 			printf("\n");
 		}
 	} else {
@@ -60,3 +60,4 @@ int main (int argc, const char * argv[]) {
 	fclose(fp);
 	return 0;
 }
+

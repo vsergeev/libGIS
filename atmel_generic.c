@@ -3,7 +3,7 @@
  *  Utility functions to create, read, write, and print Atmel Generic binary records.
  *
  *  Written by Vanya A. Sergeev <vsergeev@gmail.com>
- *  Version 1.0.5 - January 2011
+ *  Version 1.0.5 - February 2011
  *
  */
 
@@ -71,19 +71,20 @@ int Read_AtmelGenericRecord(AtmelGenericRecord *genericRecord, FILE *in) {
 }
 
 /* Utility function to write an Atmel Generic record to a file */
-int Write_AtmelGenericRecord(const AtmelGenericRecord genericRecord, FILE *out) {
+int Write_AtmelGenericRecord(const AtmelGenericRecord *genericRecord, FILE *out) {
 	/* Check our file pointer */
 	if (out == NULL)
 		return ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS;
 	
-	if (fprintf(out, "%2.6X%c%2.4X\r\n", genericRecord.address, ATMEL_GENERIC_SEPARATOR, genericRecord.data) < 0)
+	if (fprintf(out, "%2.6X%c%2.4X\r\n", genericRecord->address, ATMEL_GENERIC_SEPARATOR, genericRecord->data) < 0)
 		return ATMEL_GENERIC_ERROR_FILE;
 	
 	return ATMEL_GENERIC_OK;
 }
 
 /* Utility function to print the information stored in an Atmel Generic record */
-void Print_AtmelGenericRecord(const AtmelGenericRecord genericRecord) {
-	printf("Atmel Generic Address: 0x%2.6X\n", genericRecord.address);
-	printf("Atmel Generic Data: 0x%2.4X\n", genericRecord.data); 
+void Print_AtmelGenericRecord(const AtmelGenericRecord *genericRecord) {
+	printf("Atmel Generic Address: 0x%2.6X\n", genericRecord->address);
+	printf("Atmel Generic Data: 0x%2.4X\n", genericRecord->data); 
 }
+
