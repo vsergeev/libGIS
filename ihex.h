@@ -61,16 +61,13 @@ enum IHexRecordTypes {
 /**
  * Structure to hold the fields of an Intel HEX8 record.
  */
-struct _IHexRecord {
+typedef struct {
 	uint16_t address; 			/**< The 16-bit address field. */
 	uint8_t data[IHEX_MAX_DATA_LEN/2]; 	/**< The 8-bit array data field, which has a maximum size of 256 bytes. */
 	int dataLen; 				/**< The number of bytes of data stored in this record. */
-	int type; 				/**< The Intel Hex record type of this record. */
+	int type; 				/**< The Intel HEX8 record type of this record. */
 	uint8_t checksum; 			/**< The checksum of this record. */
-};
-
-/** Alias "IHexRecord" for struct _IHexRecord, done for convenience and clarity. */
-typedef struct _IHexRecord IHexRecord;
+} IHexRecord;
 
 /**
  * Sets all of the record fields of an Intel HEX8 record structure.
@@ -81,7 +78,7 @@ typedef struct _IHexRecord IHexRecord;
  * \param ihexRecord A pointer to the target Intel HEX8 record structure where these fields will be set.
  * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
  * \retval IHEX_OK on success.
- * \retval IHEX_ERROR_INVALID_ARGUMENTS if ihexRecord does not point to a valid IHexRecord structure, or if the length of the 8-bit data array is out of range (less than zero or greater than the maximum data length allowed by record specifications, see IHexRecord.data).
+ * \retval IHEX_ERROR_INVALID_ARGUMENTS if the record pointer is NULL, or if the length of the 8-bit data array is out of range (less than zero or greater than the maximum data length allowed by record specifications, see IHexRecord.data).
 */
 int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen, IHexRecord *ihexRecord);
 
@@ -91,7 +88,7 @@ int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen,
  * \param in A file pointer to an opened file that can be read.
  * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
  * \retval IHEX_OK on success.
- * \retval IHEX_ERROR_INVALID_ARGUMENTS if ihexRecord does not point to a valid IHexRecord structure or the file pointer "in" is invalid.
+ * \retval IHEX_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval IHEX_ERROR_EOF if end-of-file has been reached.
  * \retval IHEX_ERROR_FILE if a file reading error has occured.
  * \retval IHEX_INVALID_RECORD if the record read is invalid (record did not match specifications or record checksum was invalid).
@@ -104,7 +101,7 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in);
  * \param out A file pointer to an opened file that can be written to.
  * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
  * \retval IHEX_OK on success. 
- * \retval IHEX_ERROR_INVALID_ARGUMENTS if the file pointer "out" is invalid.
+ * \retval IHEX_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval IHEX_ERROR_INVALID_RECORD if the record's data length is out of range (greater than the maximum data length allowed by record specifications, see IHexRecord.data).
  * \retval IHEX_ERROR_FILE if a file writing error has occured.
 */

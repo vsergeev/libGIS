@@ -4,8 +4,8 @@
  * \file atmel_generic.h
  * \brief Low-level utility functions to create, read, write, and print Atmel Generic binary records.
  * \author Vanya A. Sergeev <vsergeev@gmail.com>
- * \date October 10 2009
- * \version 1.0.3
+ * \date February 2011
+ * \version 1.0.5
  */
 
 #include <stdio.h>
@@ -26,7 +26,7 @@ enum _AtmelGenericDefinitions {
 };
 
 /**
- * All possible error codes the Atmel Generic record utility functions may return.
+ * All of the possible error codes the Atmel Generic record utility functions may return.
  */
 enum AtmelGenericErrors {
 	ATMEL_GENERIC_OK = 0, 				/**< Error code for success or no error. */
@@ -40,13 +40,10 @@ enum AtmelGenericErrors {
 /**
  * Structure to hold the fields of an Atmel Generic record.
  */
-struct _AtmelGenericRecord {
+typedef struct {
 	uint32_t address; 	/**< The 24-bit address field of the record. */
 	uint16_t data; 		/**< The 16-bit data field of the record. */
-};
-
-/** Alias "AtmelGenericRecord" for struct _AtmelGenericRecord, done for convenience and clarity. */
-typedef struct _AtmelGenericRecord AtmelGenericRecord;
+} AtmelGenericRecord;
 
 /**
  * Sets all of the record fields of an Atmel Generic record structure.
@@ -56,7 +53,7 @@ typedef struct _AtmelGenericRecord AtmelGenericRecord;
  * \param genericRecord A pointer to the target Atmel Generic record structure where these fields will be set.
  * \return ATMEL_GENERIC_OK on success, otherwise one of the ATMEL_GENERIC_ERROR_ error codes.
  * \retval ATMEL_GENERIC_OK on success.
- * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if genericRecord does not point to a valid AtmelGenericRecord structure.
+ * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the record pointer is NULL.
 */
 int New_AtmelGenericRecord(uint32_t address, uint16_t data, AtmelGenericRecord *genericRecord);
 
@@ -66,7 +63,7 @@ int New_AtmelGenericRecord(uint32_t address, uint16_t data, AtmelGenericRecord *
  * \param in A file pointer to an opened file that can be read.
  * \return ATMEL_GENERIC_OK on success, otherwise one of the ATMEL_GENERIC_ERROR_ error codes.
  * \retval ATMEL_GENERIC_OK on success.
- * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if genericRecord does not point to a valid AtmelGenericRecord structure or the file pointer is invalid.
+ * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval ATMEL_GENERIC_ERROR_EOF if end-of-file has been reached.
  * \retval ATMEL_GENERIC_ERROR_FILE if a file reading error has occured.
  * \retval ATMEL_GENERIC_INVALID_RECORD if the record read is invalid (record did not match specifications).
@@ -80,7 +77,7 @@ int Read_AtmelGenericRecord(AtmelGenericRecord *genericRecord, FILE *in);
  * \param out A file pointer to an opened file that can be written to.
  * \return ATMEL_GENERIC_OK on success, otherwise one of the ATMEL_GENERIC_ERROR_ error codes.
  * \retval ATMEL_GENERIC_OK on success. 
- * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the file pointer is invalid.
+ * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval ATMEL_GENERIC_ERROR_FILE if a file writing error has occured.
 */
 int Write_AtmelGenericRecord(const AtmelGenericRecord *genericRecord, FILE *out);

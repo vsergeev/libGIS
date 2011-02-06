@@ -1,8 +1,6 @@
 /*
- * Very straight forward program that makes use of atmel_generic.h, ihex.h, and srecord.h.
  * This program prints all of the records stored in an Atmel Generic, Intel HEX, or Motorola S-Record formatted file.
  * Author: Vanya A. Sergeev <vsergeev@gmail.com>
- *
  */
 
 #include <stdio.h>

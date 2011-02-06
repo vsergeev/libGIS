@@ -26,7 +26,7 @@ static int SRecord_Address_Lengths[] = {
 /* Initializes a new IHexRecord structure that the paramater srec points to with the passed
  * S-Record type, up to 32-bit integer address, 8-bit data array, and size of 8-bit data array. */
 int New_SRecord(int type, uint32_t address, const uint8_t *data, int dataLen, SRecord *srec) {
-	/* Data length size check, assertion of srec */
+	/* Data length size check, assertion of srec pointer */
 	if (dataLen < 0 || dataLen > SRECORD_MAX_DATA_LEN/2 || srec == NULL)
 		return SRECORD_ERROR_INVALID_ARGUMENTS;
 	
@@ -47,8 +47,8 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 	char hexBuff[SRECORD_MAX_ADDRESS_LEN+1];
 	int asciiAddressLen, asciiDataLen, dataOffset, fieldDataCount, i;
 	
-	/* Check our file pointer and the S-Record struct */
-	if (in == NULL || srec == NULL)
+	/* Check our record pointer and file pointer */
+	if (srec == NULL || in == NULL)
 		return SRECORD_ERROR_INVALID_ARGUMENTS;
 	
 	if (fgets(recordBuff, SRECORD_RECORD_BUFF_SIZE, in) == NULL) {
@@ -143,8 +143,8 @@ int Write_SRecord(const SRecord *srec, FILE *out) {
 	char strAddress[SRECORD_MAX_ADDRESS_LEN+1];
 	int asciiAddressLen, asciiAddressOffset, fieldDataCount, i;
 	
-	/* Check our file pointer */
-	if (out == NULL)
+	/* Check our record pointer and file pointer */
+	if (srec == NULL || out == NULL)
 		return SRECORD_ERROR_INVALID_ARGUMENTS;
 	
 	/* Check that the type and data length is within range */
@@ -187,9 +187,9 @@ int Write_SRecord(const SRecord *srec, FILE *out) {
 /* Utility function to print the information stored in an S-Record */
 void Print_SRecord(const SRecord *srec) {
 	int i;
-	printf("S-Record Type: S%d\n", srec->type);
-	printf("S-Record Address: 0x%2.8X\n", srec->address);
-	printf("S-Record Data: {");
+	printf("S-Record Type: \t\tS%d\n", srec->type);
+	printf("S-Record Address: \t0x%2.8X\n", srec->address);
+	printf("S-Record Data: \t\t{");
 	for (i = 0; i < srec->dataLen; i++) {
 		if (i+1 < srec->dataLen)
 			printf("0x%02X, ", srec->data[i]);
@@ -197,7 +197,7 @@ void Print_SRecord(const SRecord *srec) {
 			printf("0x%02X", srec->data[i]);
 	}
 	printf("}\n");
-	printf("S-Record Checksum: 0x%2.2X\n", srec->checksum);
+	printf("S-Record Checksum: \t0x%2.2X\n", srec->checksum);
 }
 
 /* Utility function to calculate the checksum of an S-Record */
