@@ -2,7 +2,7 @@ ChangeLog
 
 Version 1.0.5 - 02/05/2011
 	* Interface change!: write, print, and checksum functions now take a pointer to the record structure instead of a copy, for more efficient use of memory.
-	* Prettier debug printing of Intel HEX8 and SRecord records
+	* Prettier debug printing of Intel HEX8 and Motorola S-Record records
 	* Clean up of some of the source code comments and doxygen descriptions
 
 Version 1.0.4 - 07/08/2010
