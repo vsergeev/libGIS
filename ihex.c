@@ -72,7 +72,7 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_ADDRESS_OFFSET, IHEX_ADDRESS_LEN);
 	hexBuff[IHEX_ADDRESS_LEN] = 0;
-	ihexRecord->address = strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->address = (uint16_t)strtol(hexBuff, (char **)NULL, 16);
 	
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_TYPE_OFFSET, IHEX_TYPE_LEN);
@@ -89,14 +89,14 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 		/* Times two i because every byte is represented by two ASCII hex characters */
 		strncpy(hexBuff, recordBuff+IHEX_DATA_OFFSET+2*i, IHEX_ASCII_HEX_BYTE_LEN);
 		hexBuff[IHEX_ASCII_HEX_BYTE_LEN] = 0;
-		ihexRecord->data[i] = strtol(hexBuff, (char **)NULL, 16);
+		ihexRecord->data[i] = (uint8_t)strtol(hexBuff, (char **)NULL, 16);
 	}
 	ihexRecord->dataLen = dataCount;	
 	
 	/* Copy the ASCII hex encoding of the checksum field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_DATA_OFFSET+dataCount*2, IHEX_CHECKSUM_LEN);
 	hexBuff[IHEX_CHECKSUM_LEN] = 0;
-	ihexRecord->checksum = strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->checksum = (uint8_t)strtol(hexBuff, (char **)NULL, 16);
 
 	if (ihexRecord->checksum != Checksum_IHexRecord(ihexRecord))
 		return IHEX_ERROR_INVALID_RECORD;
