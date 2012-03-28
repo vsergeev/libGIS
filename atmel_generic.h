@@ -76,7 +76,7 @@ int Read_AtmelGenericRecord(AtmelGenericRecord *genericRecord, FILE *in);
  * \param genericRecord A pointer to the Atmel Generic record structure.
  * \param out A file pointer to an opened file that can be written to.
  * \return ATMEL_GENERIC_OK on success, otherwise one of the ATMEL_GENERIC_ERROR_ error codes.
- * \retval ATMEL_GENERIC_OK on success. 
+ * \retval ATMEL_GENERIC_OK on success.
  * \retval ATMEL_GENERIC_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval ATMEL_GENERIC_ERROR_FILE if a file writing error has occured.
 */

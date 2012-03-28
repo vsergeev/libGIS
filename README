@@ -14,13 +14,13 @@ Version 1.0.3 - 10/10/2009
 	* testGIS.c: a redefine of strcasecmp to stricmp for Windows support.
 	* Cleaned up some compiler warnings from signed/unsigned comparisons.
 	* Thanks to Brendan McDonnell for the above four fixes.
-	* Minor documentation clean up. 
+	* Minor documentation clean up.
 
 Version 1.0.2 - 2009/06/27
 	* Small bug fix: record reader functions will now return a newline return code when a lone newline in the file (sometimes found at the end) is encountered instead of erroring out with an invalid record error code.
 
-Version 1.0.0 - 2006/12/24 
-	* Initial Release. 
+Version 1.0.0 - 2006/12/24
+	* Initial Release.
 
 libGIS README
 Vanya Sergeev

@@ -7,7 +7,7 @@
  * \date February 2011
  * \version 1.0.5
  */
- 
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -105,7 +105,7 @@ int Read_SRecord(SRecord *srec, FILE *in);
  * \param srec A pointer to the Motorola S-Record structure.
  * \param out A file pointer to an opened file that can be written to.
  * \return SRECORD_OK on success, otherwise one of the SRECORD_ERROR_ error codes.
- * \retval SRECORD_OK on success. 
+ * \retval SRECORD_OK on success.
  * \retval SRECORD_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
  * \retval SRECORD_ERROR_INVALID_RECORD if the record's data length (the SRecord.dataLen variable of the record) is out of range (greater than the maximum data length allowed by record specifications, see SRecord.data).
  * \retval SRECORD_ERROR_FILE if a file writing error has occured.
