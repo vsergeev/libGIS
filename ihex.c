@@ -67,7 +67,7 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_COUNT_OFFSET, IHEX_COUNT_LEN);
 	hexBuff[IHEX_COUNT_LEN] = 0;
-	dataCount = strtol(hexBuff, (char **)NULL, 16);
+	dataCount = (int)strtol(hexBuff, (char **)NULL, 16);
 
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_ADDRESS_OFFSET, IHEX_ADDRESS_LEN);
@@ -77,7 +77,7 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_TYPE_OFFSET, IHEX_TYPE_LEN);
 	hexBuff[IHEX_TYPE_LEN] = 0;
-	ihexRecord->type = strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->type = (int)strtol(hexBuff, (char **)NULL, 16);
 
 	/* Size check for start code, count, address, type, data and checksum fields */
 	if (strlen(recordBuff) < (unsigned int)(1+IHEX_COUNT_LEN+IHEX_ADDRESS_LEN+IHEX_TYPE_LEN+dataCount*2+IHEX_CHECKSUM_LEN))
