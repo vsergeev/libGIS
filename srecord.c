@@ -81,12 +81,12 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 	/* Copy the ASCII hex encoding of the type field into hexBuff, convert it into a usable integer */
 	strncpy(hexBuff, recordBuff+SRECORD_TYPE_OFFSET, SRECORD_TYPE_LEN);
 	hexBuff[SRECORD_TYPE_LEN] = 0;
-	srec->type = strtol(hexBuff, (char **)NULL, 16);
+	srec->type = (int)strtol(hexBuff, (char **)NULL, 16);
 
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+SRECORD_COUNT_OFFSET, SRECORD_COUNT_LEN);
 	hexBuff[SRECORD_COUNT_LEN] = 0;
-	fieldDataCount = strtol(hexBuff, (char **)NULL, 16);
+	fieldDataCount = (int)strtol(hexBuff, (char **)NULL, 16);
 
 	/* Check that our S-Record type is valid */
 	if (srec->type < SRECORD_TYPE_S0 || srec->type > SRECORD_TYPE_S9)
@@ -101,7 +101,7 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+SRECORD_ADDRESS_OFFSET, asciiAddressLen);
 	hexBuff[asciiAddressLen] = 0;
-	srec->address = strtol(hexBuff, (char **)NULL, 16);
+	srec->address = (int)strtol(hexBuff, (char **)NULL, 16);
 
 	/* Compute the ASCII hex data length by subtracting the remaining field lengths from the S-Record
 	 * count field (times 2 to account for the number of characters used in ASCII hex encoding) */
