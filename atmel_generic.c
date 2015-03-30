@@ -61,11 +61,11 @@ int Read_AtmelGenericRecord(AtmelGenericRecord *genericRecord, FILE *in) {
 	/* Replace the colon "start code" with a 0 so we can convert the ascii hex encoded
 	 * address up to this point */
 	recordBuff[ATMEL_GENERIC_SEPARATOR_OFFSET] = 0;
-	genericRecord->address = strtol(recordBuff, (char **)NULL, 16);
+	genericRecord->address = (uint32_t)strtoul(recordBuff, (char **)NULL, 16);
 
 	/* Convert the rest of the data past the colon, this string has been null terminated at
 	 * the end already */
-	genericRecord->data = strtol(recordBuff+ATMEL_GENERIC_SEPARATOR_OFFSET+1, (char **)NULL, 16);
+	genericRecord->data = (uint16_t)strtoul(recordBuff+ATMEL_GENERIC_SEPARATOR_OFFSET+1, (char **)NULL, 16);
 
 	return ATMEL_GENERIC_OK;
 }

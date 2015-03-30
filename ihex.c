@@ -18,7 +18,7 @@ int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen,
 
 	ihexRecord->type = type;
 	ihexRecord->address = address;
-	memcpy(ihexRecord->data, data, dataLen);
+	memcpy(ihexRecord->data, data, (unsigned int)dataLen);
 	ihexRecord->dataLen = dataLen;
 	ihexRecord->checksum = Checksum_IHexRecord(ihexRecord);
 
@@ -67,17 +67,17 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_COUNT_OFFSET, IHEX_COUNT_LEN);
 	hexBuff[IHEX_COUNT_LEN] = 0;
-	dataCount = strtol(hexBuff, (char **)NULL, 16);
+	dataCount = (int)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_ADDRESS_OFFSET, IHEX_ADDRESS_LEN);
 	hexBuff[IHEX_ADDRESS_LEN] = 0;
-	ihexRecord->address = (uint16_t)strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->address = (uint16_t)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Copy the ASCII hex encoding of the address field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_TYPE_OFFSET, IHEX_TYPE_LEN);
 	hexBuff[IHEX_TYPE_LEN] = 0;
-	ihexRecord->type = strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->type = (int)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Size check for start code, count, address, type, data and checksum fields */
 	if (strlen(recordBuff) < (unsigned int)(1+IHEX_COUNT_LEN+IHEX_ADDRESS_LEN+IHEX_TYPE_LEN+dataCount*2+IHEX_CHECKSUM_LEN))
@@ -89,14 +89,14 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 		/* Times two i because every byte is represented by two ASCII hex characters */
 		strncpy(hexBuff, recordBuff+IHEX_DATA_OFFSET+2*i, IHEX_ASCII_HEX_BYTE_LEN);
 		hexBuff[IHEX_ASCII_HEX_BYTE_LEN] = 0;
-		ihexRecord->data[i] = (uint8_t)strtol(hexBuff, (char **)NULL, 16);
+		ihexRecord->data[i] = (uint8_t)strtoul(hexBuff, (char **)NULL, 16);
 	}
 	ihexRecord->dataLen = dataCount;
 
 	/* Copy the ASCII hex encoding of the checksum field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+IHEX_DATA_OFFSET+dataCount*2, IHEX_CHECKSUM_LEN);
 	hexBuff[IHEX_CHECKSUM_LEN] = 0;
-	ihexRecord->checksum = (uint8_t)strtol(hexBuff, (char **)NULL, 16);
+	ihexRecord->checksum = (uint8_t)strtoul(hexBuff, (char **)NULL, 16);
 
 	if (ihexRecord->checksum != Checksum_IHexRecord(ihexRecord))
 		return IHEX_ERROR_INVALID_RECORD;
@@ -155,12 +155,12 @@ uint8_t Checksum_IHexRecord(const IHexRecord *ihexRecord) {
 	int i;
 
 	/* Add the data count, type, address, and data bytes together */
-	checksum = ihexRecord->dataLen;
-	checksum += ihexRecord->type;
+	checksum = (uint8_t)ihexRecord->dataLen;
+	checksum += (uint8_t)ihexRecord->type;
 	checksum += (uint8_t)ihexRecord->address;
 	checksum += (uint8_t)((ihexRecord->address & 0xFF00)>>8);
 	for (i = 0; i < ihexRecord->dataLen; i++)
-		checksum += ihexRecord->data[i];
+		checksum += (uint8_t)ihexRecord->data[i];
 
 	/* Two's complement on checksum */
 	checksum = ~checksum + 1;

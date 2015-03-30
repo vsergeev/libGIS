@@ -32,7 +32,7 @@ int New_SRecord(int type, uint32_t address, const uint8_t *data, int dataLen, SR
 
 	srec->type = type;
 	srec->address = address;
-	memcpy(srec->data, data, dataLen);
+	memcpy(srec->data, data, (unsigned int)dataLen);
 	srec->dataLen = dataLen;
 	srec->checksum = Checksum_SRecord(srec);
 
@@ -81,12 +81,12 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 	/* Copy the ASCII hex encoding of the type field into hexBuff, convert it into a usable integer */
 	strncpy(hexBuff, recordBuff+SRECORD_TYPE_OFFSET, SRECORD_TYPE_LEN);
 	hexBuff[SRECORD_TYPE_LEN] = 0;
-	srec->type = strtol(hexBuff, (char **)NULL, 16);
+	srec->type = (int)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
 	strncpy(hexBuff, recordBuff+SRECORD_COUNT_OFFSET, SRECORD_COUNT_LEN);
 	hexBuff[SRECORD_COUNT_LEN] = 0;
-	fieldDataCount = strtol(hexBuff, (char **)NULL, 16);
+	fieldDataCount = (int)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Check that our S-Record type is valid */
 	if (srec->type < SRECORD_TYPE_S0 || srec->type > SRECORD_TYPE_S9)
@@ -99,9 +99,9 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 		return SRECORD_ERROR_INVALID_RECORD;
 
 	/* Copy the ASCII hex encoding of the count field into hexBuff, convert it to a usable integer */
-	strncpy(hexBuff, recordBuff+SRECORD_ADDRESS_OFFSET, asciiAddressLen);
+	strncpy(hexBuff, recordBuff+SRECORD_ADDRESS_OFFSET, (unsigned int)asciiAddressLen);
 	hexBuff[asciiAddressLen] = 0;
-	srec->address = strtol(hexBuff, (char **)NULL, 16);
+	srec->address = (uint32_t)strtoul(hexBuff, (char **)NULL, 16);
 
 	/* Compute the ASCII hex data length by subtracting the remaining field lengths from the S-Record
 	 * count field (times 2 to account for the number of characters used in ASCII hex encoding) */
@@ -122,7 +122,7 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 		/* Times two i because every byte is represented by two ASCII hex characters */
 		strncpy(hexBuff, recordBuff+dataOffset+2*i, SRECORD_ASCII_HEX_BYTE_LEN);
 		hexBuff[SRECORD_ASCII_HEX_BYTE_LEN] = 0;
-		srec->data[i] = strtol(hexBuff, (char **)NULL, 16);
+		srec->data[i] = (uint8_t)strtoul(hexBuff, (char **)NULL, 16);
 	}
 	/* Real data len is divided by two because every byte is represented by two ASCII hex characters */
 	srec->dataLen = asciiDataLen/2;
@@ -130,7 +130,7 @@ int Read_SRecord(SRecord *srec, FILE *in) {
 	/* Copy out the checksum ASCII hex encoded byte, and convert it back to a usable integer */
 	strncpy(hexBuff, recordBuff+dataOffset+asciiDataLen, SRECORD_CHECKSUM_LEN);
 	hexBuff[SRECORD_CHECKSUM_LEN] = 0;
-	srec->checksum = strtol(hexBuff, (char **)NULL, 16);
+	srec->checksum = (uint8_t)strtoul(hexBuff, (char **)NULL, 16);
 
 	if (srec->checksum != Checksum_SRecord(srec))
 		return SRECORD_ERROR_INVALID_RECORD;
@@ -210,14 +210,14 @@ uint8_t Checksum_SRecord(const SRecord *srec) {
 	fieldDataCount = SRecord_Address_Lengths[srec->type]/2 + srec->dataLen + SRECORD_CHECKSUM_LEN/2;
 
 	/* Add the count, address, and data fields together */
-	checksum = fieldDataCount;
+	checksum = (uint8_t)fieldDataCount;
 	/* Add each byte of the address individually */
 	checksum += (uint8_t)(srec->address & 0x000000FF);
 	checksum += (uint8_t)((srec->address & 0x0000FF00) >> 8);
 	checksum += (uint8_t)((srec->address & 0x00FF0000) >> 16);
 	checksum += (uint8_t)((srec->address & 0xFF000000) >> 24);
 	for (i = 0; i < srec->dataLen; i++)
-		checksum += srec->data[i];
+		checksum += (uint8_t)srec->data[i];
 
 	/* One's complement the checksum */
 	checksum = ~checksum;
