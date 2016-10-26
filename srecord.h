@@ -25,7 +25,7 @@ enum _SRecordDefinitions {
 	SRECORD_ADDRESS_OFFSET = 4,
 	SRECORD_CHECKSUM_LEN = 2,
 	/* Maximum ascii hex length of the S-Record data field */
-	SRECORD_MAX_DATA_LEN = 64,
+	SRECORD_MAX_DATA_LEN = 254*2,
 	/* Maximum ascii hex length of the S-Record address field */
 	SRECORD_MAX_ADDRESS_LEN = 8,
 	/* Ascii hex length of a single byte */
