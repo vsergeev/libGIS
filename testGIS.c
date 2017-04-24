@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
+
 #include "srecord.h"
 #include "atmel_generic.h"
 #include "ihex.h"
