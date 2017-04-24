@@ -1,4 +1,4 @@
-CC = gcc
+CC ?= gcc
 CFLAGS = -Wall -Wextra -O3
 LDFLAGS=
 OBJECTS = atmel_generic.o ihex.o srecord.o testGIS.o
