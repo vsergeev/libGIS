@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS = -Wall -Wextra -O3
+CFLAGS = -std=c99 -Wpedantic -Wall -Wextra -O3
 LDFLAGS=
 OBJECTS = atmel_generic.o ihex.o srecord.o testGIS.o
 PROGNAME = testGIS
