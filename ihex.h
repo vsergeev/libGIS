@@ -83,6 +83,18 @@ typedef struct {
 int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen, IHexRecord *ihexRecord);
 
 /**
+ * Parses an Intel HEX8 record from a character buffer.
+ * \param ihexRecord A pointer to the Intel HEX8 record structure that will store the read record.
+ * \param recordBuff A character buffer holding one Intel HEX8 record
+ * \param dataLen the size of recordBuff. If null terminated, dataLen can be 0
+ * \return IHEX_OK on success, otherwise one of the IHEX_ERROR_ error codes.
+ * \retval IHEX_OK on success.
+ * \retval IHEX_ERROR_INVALID_ARGUMENTS if the record pointer or file pointer is NULL.
+ * \retval IHEX_INVALID_RECORD if the record read is invalid (record did not match specifications or record checksum was invalid).
+*/
+int Parse_IHexRecord(IHexRecord *ihexRecord, const char* recordBuff, int dataLen);
+
+/**
  * Reads an Intel HEX8 record from an opened file.
  * \param ihexRecord A pointer to the Intel HEX8 record structure that will store the read record.
  * \param in A file pointer to an opened file that can be read.

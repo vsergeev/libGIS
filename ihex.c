@@ -25,35 +25,23 @@ int New_IHexRecord(int type, uint16_t address, const uint8_t *data, int dataLen,
 	return IHEX_OK;
 }
 
-/* Utility function to read an Intel HEX8 record from a file */
-int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
-	char recordBuff[IHEX_RECORD_BUFF_SIZE];
+/* Utility function to parse an Intel HEX8 record from a char buffer */
+int Parse_IHexRecord(IHexRecord *ihexRecord, const char* recordBuff, int dataLen) {
 	/* A temporary buffer to hold ASCII hex encoded data, set to the maximum length we would ever need */
 	char hexBuff[IHEX_ADDRESS_LEN+1];
 	int dataCount, i;
 
-	/* Check our record pointer and file pointer */
-	if (ihexRecord == NULL || in == NULL)
-		return IHEX_ERROR_INVALID_ARGUMENTS;
-
-	if (fgets(recordBuff, IHEX_RECORD_BUFF_SIZE, in) == NULL) {
-			/* In case we hit EOF, don't report a file error */
-			if (feof(in) != 0)
-				return IHEX_ERROR_EOF;
-			else
-				return IHEX_ERROR_FILE;
-	}
-	/* Null-terminate the string at the first sign of a \r or \n */
-	for (i = 0; i < (int)strlen(recordBuff); i++) {
-		if (recordBuff[i] == '\r' || recordBuff[i] == '\n') {
-			recordBuff[i] = 0;
-			break;
-		}
-	}
-
-
-	/* Check if we hit a newline */
-	if (strlen(recordBuff) == 0)
+    // we can read null terminated strings without a known len
+    if (dataLen == 0) {
+	    for (i = 0; i < (int)strlen(recordBuff); i++) {
+            if (recordBuff[i] == '\r' || recordBuff[i] == '\n') {
+                dataLen = i;
+			    break;
+		    }
+        }
+    }
+	/* Check if we have an empty string */
+	if (dataLen == 0)
 		return IHEX_ERROR_NEWLINE;
 
 	/* Size check for start code, count, addess, and type fields */
@@ -102,6 +90,33 @@ int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
 		return IHEX_ERROR_INVALID_RECORD;
 
 	return IHEX_OK;
+
+}
+
+/* Utility function to read an Intel HEX8 record from a file */
+int Read_IHexRecord(IHexRecord *ihexRecord, FILE *in) {
+	char recordBuff[IHEX_RECORD_BUFF_SIZE];
+    int i;
+
+	/* Check our record pointer and file pointer */
+	if (ihexRecord == NULL || in == NULL)
+		return IHEX_ERROR_INVALID_ARGUMENTS;
+
+	if (fgets(recordBuff, IHEX_RECORD_BUFF_SIZE, in) == NULL) {
+			/* In case we hit EOF, don't report a file error */
+			if (feof(in) != 0)
+				return IHEX_ERROR_EOF;
+			else
+				return IHEX_ERROR_FILE;
+	}
+	/* Null-terminate the string at the first sign of a \r or \n */
+	for (i = 0; i < (int)strlen(recordBuff); i++) {
+		if (recordBuff[i] == '\r' || recordBuff[i] == '\n') {
+			recordBuff[i] = 0;
+			break;
+		}
+	}
+    return Parse_IHexRecord(ihexRecord, recordBuff, strlen(recordBuff));
 }
 
 /* Utility function to write an Intel HEX8 record to a file */
