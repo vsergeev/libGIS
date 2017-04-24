@@ -1,4 +1,6 @@
-# libGIS - Atmel Generic, Intel HEX, and Motorola S-Record Parser Routines
+# Note: this project is functional, but no longer maintained.
+
+## libGIS - Atmel Generic, Intel HEX, and Motorola S-Record Parser Routines
 
 **ChangeLog**
 
